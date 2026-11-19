@@ -1,0 +1,12 @@
+{
+  "name": "20-11-tribute",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Website tri ân Ngày Nhà giáo Việt Nam 20/11 - cinematic interactive experience",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/dev.mjs dist 4173"
+  }
+}

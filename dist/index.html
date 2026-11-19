@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#5c1024">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%237c122e'/%3E%3Cg fill='%23ec4a68'%3E%3Cellipse cx='32' cy='20' rx='8' ry='14'/%3E%3Cellipse cx='32' cy='20' rx='8' ry='14' transform='rotate(72 32 32)'/%3E%3Cellipse cx='32' cy='20' rx='8' ry='14' transform='rotate(144 32 32)'/%3E%3Cellipse cx='32' cy='20' rx='8' ry='14' transform='rotate(216 32 32)'/%3E%3Cellipse cx='32' cy='20' rx='8' ry='14' transform='rotate(288 32 32)'/%3E%3C/g%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ffe6a8'/%3E%3C/svg%3E">
+    <title>Tri Ân Ngày Nhà Giáo Việt Nam 20/11</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="grain" aria-hidden="true"></div>
+    <canvas id="fx-canvas" aria-hidden="true"></canvas>
+
+    <!-- Mở đầu cinematic: tự động, không có nút Skip Intro -->
+    <div id="intro-overlay" class="intro-overlay">
+        <div class="intro-wrapper">
+            <p class="intro-line" id="line-1">Hôm nay là ngày gì ấy nhỉ?</p>
+            <p class="intro-line" id="line-2">À...</p>
+            <p class="intro-line" id="line-3">Hôm nay là Ngày Nhà giáo Việt Nam.</p>
+        </div>
+    </div>
+
+    <main id="app">
+        <!-- =========================================================
+             GIAI ĐOẠN 1 – MÀN HÌNH CHÚC MỪNG
+        ========================================================== -->
+        <section id="stage-1" class="stage stage-greeting hidden-stage" data-stage="1">
+            <div class="stage-vignette" aria-hidden="true"></div>
+            <div class="branch-wrap" id="branch-wrap">
+                <img id="phuong-branch-img" src="assets/branch/phuong-branch.svg" alt="Cành phượng đỏ">
+            </div>
+
+            <div class="greeting-content">
+                <svg class="curved-text-svg" viewBox="0 0 600 220" aria-label="Chúc Thầy Cô Luôn Mạnh Khỏe, Hạnh Phúc & Rạng Rỡ Như Hoa Hướng">
+                    <defs>
+                        <path id="curve-outer" d="M 40,200 A 260,260 0 0,1 560,200" fill="transparent"/>
+                        <path id="curve-inner" d="M 85,205 A 215,215 0 0,1 515,205" fill="transparent"/>
+                    </defs>
+                    <text class="curve-title-main">
+                        <textPath href="#curve-outer" startOffset="50%" text-anchor="middle">Chúc Thầy Cô Luôn Mạnh Khỏe, Hạnh Phúc &amp; Rạng Rỡ Như Hoa Hướng</textPath>
+                    </text>
+                    <text class="curve-title-sub">
+                        <textPath href="#curve-inner" startOffset="50%" text-anchor="middle">✿ TRI ÂN NGƯỜI LÁI ĐÒ THẦM LẶNG CHẮP CÁNH ƯỚC MƠ ✿</textPath>
+                    </text>
+                </svg>
+
+                <div class="hero-center">
+                    <h1 class="big-date">20/11</h1>
+                    <h2 class="main-heading">NGÀY NHÀ GIÁO VIỆT NAM</h2>
+                    <svg class="hero-emblem" viewBox="0 0 240 54" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="emblemGold" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0" stop-color="#b98228"/>
+                                <stop offset="0.5" stop-color="#ffe8a3"/>
+                                <stop offset="1" stop-color="#b98228"/>
+                            </linearGradient>
+                        </defs>
+                        <g fill="none" stroke="url(#emblemGold)" stroke-width="1.6" stroke-linecap="round">
+                            <path d="M112 27 C86 30 62 22 42 6"/>
+                            <path d="M128 27 C154 30 178 22 198 6"/>
+                            <path d="M112 27 C86 24 62 32 42 48"/>
+                            <path d="M128 27 C154 24 178 32 198 48"/>
+                        </g>
+                        <g fill="url(#emblemGold)">
+                            <ellipse cx="98" cy="25" rx="7" ry="3" transform="rotate(-24 98 25)"/>
+                            <ellipse cx="82" cy="21" rx="7" ry="3" transform="rotate(-32 82 21)"/>
+                            <ellipse cx="66" cy="15" rx="7" ry="3" transform="rotate(-40 66 15)"/>
+                            <ellipse cx="142" cy="25" rx="7" ry="3" transform="rotate(24 142 25)"/>
+                            <ellipse cx="158" cy="21" rx="7" ry="3" transform="rotate(32 158 21)"/>
+                            <ellipse cx="174" cy="15" rx="7" ry="3" transform="rotate(40 174 15)"/>
+                            <ellipse cx="98" cy="30" rx="7" ry="3" transform="rotate(24 98 30)"/>
+                            <ellipse cx="82" cy="34" rx="7" ry="3" transform="rotate(32 82 34)"/>
+                            <ellipse cx="142" cy="30" rx="7" ry="3" transform="rotate(-24 142 30)"/>
+                            <ellipse cx="158" cy="34" rx="7" ry="3" transform="rotate(-32 158 34)"/>
+                        </g>
+                        <path d="M108 20 L120 20 L124 34 L120 31 L116 34 L112 31 L108 34 L104 31 Z" fill="#c42043" stroke="url(#emblemGold)" stroke-width="1.3"/>
+                    </svg>
+                </div>
+
+                <button id="btn-enter" class="cta-btn cta-primary touch-feedback" type="button">Chạm vào đây</button>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             GIAI ĐOẠN 2 – NGÀN BÔNG HOA
+        ========================================================== -->
+        <section id="stage-2" class="stage stage-bloom hidden-stage" data-stage="2">
+            <div id="flower-bed" class="flower-bed" aria-hidden="true"></div>
+            <div class="bloom-tint" aria-hidden="true"></div>
+            <div class="bloom-copy" id="bloom-copy">
+                <span class="filigree" aria-hidden="true"><i></i><b></b><i></i></span>
+                <h2 class="bloom-title">Ngàn bông hoa tri ân thầy cô</h2>
+                <span class="filigree filigree-bottom" aria-hidden="true"><i></i><b></b><i></i></span>
+            </div>
+            <button id="btn-bloom-next" class="cta-btn cta-dark touch-feedback stage-enter-hidden" type="button">Tiếp tục</button>
+        </section>
+
+        <!-- =========================================================
+             GIAI ĐOẠN 3 – CUỐN LỊCH
+        ========================================================== -->
+        <section id="stage-3" class="stage stage-calendar hidden-stage" data-stage="3">
+            <div class="calendar-scene">
+                <p class="proverb-quote">
+                    “Muốn sang thì bắc cầu Kiều,<br>
+                    Muốn con hay chữ thì yêu lấy thầy.”
+                </p>
+
+                <div class="glass-board" id="calendar-board">
+                    <div class="calendar-sheet">
+                        <div class="cal-rings" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <div class="cal-page">
+                            <div class="cal-page-shine" aria-hidden="true"></div>
+                            <h3 class="cal-month">Tháng 11</h3>
+                            <p class="cal-subtitle">TRI ÂN NGÀY NHÀ GIÁO VIỆT NAM</p>
+                            <div class="cal-grid" id="calendar-grid"></div>
+                            <p class="cal-footer">20/11 — Ngày Nhà Giáo Việt Nam</p>
+                        </div>
+                    </div>
+                </div>
+                <svg class="calendar-sprig" viewBox="0 0 120 60" aria-hidden="true">
+                    <path d="M6 52 C40 44 66 28 108 8" fill="none" stroke="#9c8a52" stroke-width="1.6"/>
+                    <g fill="#c42345">
+                        <circle cx="34" cy="42" r="5"/><circle cx="58" cy="32" r="4.4"/><circle cx="82" cy="21" r="5.2"/>
+                    </g>
+                    <g fill="#687e45">
+                        <ellipse cx="46" cy="37" rx="8" ry="3" transform="rotate(-24 46 37)"/>
+                        <ellipse cx="70" cy="27" rx="8" ry="3" transform="rotate(-24 70 27)"/>
+                    </g>
+                </svg>
+            </div>
+            <button id="btn-calendar-next" class="cta-btn cta-dark touch-feedback" type="button">Tiếp tục</button>
+        </section>
+
+        <!-- =========================================================
+             GIAI ĐOẠN 4 – LỜI CHÚC TRI ÂN 3D
+        ========================================================== -->
+        <section id="stage-4" class="stage stage-wish hidden-stage" data-stage="4">
+            <div class="sphere-header">
+                <h2 class="script-title">Vòng Hoa Lời Chúc Tri Ân</h2>
+                <p class="sphere-hint">Kéo / vuốt để xoay vòng hoa 360° • Chạm vào thẻ để đọc rõ</p>
+            </div>
+
+            <img class="wish-sprig wish-sprig-left" src="assets/flowers/phuong-blossom.svg" alt="" aria-hidden="true">
+            <img class="wish-sprig wish-sprig-right" src="assets/flowers/phuong-blossom.svg" alt="" aria-hidden="true">
+
+            <div class="wish-world" id="wish-world">
+                <canvas id="wish-particles" aria-hidden="true"></canvas>
+                <div class="wish-object" id="wish-object">
+                    <div class="wish-orbit wish-orbit-a" aria-hidden="true"></div>
+                    <div class="wish-orbit wish-orbit-b" aria-hidden="true"></div>
+                </div>
+                <div class="wish-core" aria-hidden="true">
+                    <div class="wish-core-glow"></div>
+                    <div class="wish-core-medallion">
+                        <span>20/11</span>
+                        <small>TRI ÂN</small>
+                    </div>
+                </div>
+                <div class="wish-cards" id="wish-cards"></div>
+            </div>
+
+            <div id="wish-modal" class="wish-modal hidden" role="dialog" aria-modal="true">
+                <div class="wish-modal-card">
+                    <h3 id="modal-wish-title"></h3>
+                    <p id="modal-wish-body"></p>
+                    <button id="btn-close-modal" class="cta-btn cta-dark touch-feedback" type="button">Đóng</button>
+                </div>
+            </div>
+
+            <button id="btn-wish-next" class="cta-btn cta-primary touch-feedback" type="button">Tiếp tục</button>
+        </section>
+
+        <!-- =========================================================
+             GIAI ĐOẠN 5 – THƯ TRI ÂN
+        ========================================================== -->
+        <section id="stage-5" class="stage stage-letter hidden-stage" data-stage="5">
+            <div class="letter-aurora" aria-hidden="true"></div>
+            <div class="letter-scene" id="letter-scene">
+                <div id="envelope-wrapper" class="envelope-wrapper" role="button" tabindex="0" aria-label="Mở thư tri ân">
+                    <div class="envelope-glow" aria-hidden="true"></div>
+                    <div class="envelope-sparkles" aria-hidden="true">
+                        <i></i><i></i><i></i><i></i><i></i><i></i>
+                    </div>
+                    <div class="envelope-shadow" aria-hidden="true"></div>
+                    <div class="envelope" id="envelope">
+                        <div class="envelope-back"></div>
+                        <div class="envelope-letter-edge"></div>
+                        <div class="envelope-body"></div>
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-pocket"></div>
+                        <div class="envelope-shine" aria-hidden="true"></div>
+                        <div class="wax-seal">Mở Thư</div>
+                        <p class="envelope-label">Kính gửi Thầy Cô kính yêu</p>
+                    </div>
+                </div>
+
+                <div id="letter-paper" class="letter-paper hidden">
+                    <div class="letter-inner">
+                        <div class="letter-ornament" aria-hidden="true">✦</div>
+                        <div class="letter-date typed-line" data-type>20 • 11</div>
+                        <h2 class="letter-salutation typed-line" data-type>Kính gửi Thầy/Cô kính mến!</h2>
+                        <div class="letter-body">
+                            <p class="typed-line" data-type>Nhân ngày Nhà giáo Việt Nam 20/11, chúng em xin gửi đến Thầy/Cô lời tri ân sâu sắc và chân thành nhất.</p>
+                            <p class="typed-line" data-type>Cảm ơn Thầy/Cô đã luôn kiên nhẫn, tận tụy truyền đạt tri thức và chắp cánh cho những ước mơ của chúng em bay xa.</p>
+                            <p class="typed-line" data-type>Kính chúc Thầy/Cô luôn dồi dào sức khỏe, hạnh phúc và mãi giữ trọn ngọn lửa đam mê với sự nghiệp trồng người cao quý!</p>
+                        </div>
+                        <div class="letter-sign">
+                            <span class="typed-line" data-type>Thân kính,</span>
+                            <span class="typed-line" data-type>Học trò của Thầy/Cô</span>
+                        </div>
+                        <span class="type-cursor" id="type-cursor" aria-hidden="true"></span>
+                    </div>
+                    <div class="letter-actions">
+                        <button id="btn-read-again" class="cta-btn cta-dark touch-feedback" type="button">Đọc lại thư</button>
+                        <button id="btn-restart" class="cta-btn cta-gold touch-feedback" type="button">Quay lại từ đầu</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <audio id="bg-music" src="./nhac.mp3" loop preload="auto" hidden aria-hidden="true"></audio>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

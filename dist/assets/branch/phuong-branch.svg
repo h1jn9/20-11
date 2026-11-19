@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 760" fill="none">
+  <defs>
+    <linearGradient id="stem" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6b3a2a"/>
+      <stop offset="0.45" stop-color="#8b5137"/>
+      <stop offset="1" stop-color="#4e2a22"/>
+    </linearGradient>
+    <linearGradient id="petal" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#ff7a86"/>
+      <stop offset="0.48" stop-color="#eb3352"/>
+      <stop offset="1" stop-color="#a41032"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffe9a8"/>
+      <stop offset="1" stop-color="#d98a28"/>
+    </radialGradient>
+    <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7fa05a"/>
+      <stop offset="0.55" stop-color="#4f743d"/>
+      <stop offset="1" stop-color="#294c30"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+    <symbol id="blossom" viewBox="-40 -40 80 80">
+      <g>
+        <ellipse cx="0" cy="-21" rx="13.5" ry="24" fill="url(#petal)"/>
+        <ellipse cx="0" cy="-21" rx="13.5" ry="24" fill="url(#petal)" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-21" rx="13.5" ry="24" fill="url(#petal)" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-21" rx="13.5" ry="24" fill="url(#petal)" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-21" rx="13.5" ry="24" fill="url(#petal)" transform="rotate(288)"/>
+        <circle r="10" fill="url(#core)"/>
+        <g stroke="#ffe6a0" stroke-width="1.5" stroke-linecap="round">
+          <path d="M0 0 -18 -13"/><path d="M0 0 17 -12"/><path d="M0 0 14 14"/>
+          <path d="M0 0 -15 14"/><path d="M0 0 0 -19"/>
+        </g>
+        <g fill="#fff3c4">
+          <circle cx="-18" cy="-13" r="1.8"/><circle cx="17" cy="-12" r="1.8"/>
+          <circle cx="14" cy="14" r="1.8"/><circle cx="-15" cy="14" r="1.8"/><circle cy="-19" r="1.8"/>
+        </g>
+      </g>
+    </symbol>
+    <symbol id="leaf" viewBox="-30 -12 60 24">
+      <path d="M-28 0 Q-2 -19 28 -1 Q2 17 -28 0Z" fill="url(#leafGrad)"/>
+      <path d="M-24 0 Q0 -3 24 -1" stroke="#b8d08a" stroke-width="1.1" opacity="0.65"/>
+    </symbol>
+    <symbol id="bud" viewBox="-10 -14 20 28">
+      <path d="M0 -12 C9 -8 9 5 0 12 C-9 5 -9 -8 0 -12Z" fill="url(#petal)"/>
+      <path d="M0 6 C3 2 4 -4 2 -9" stroke="#a41032" stroke-width="1"/>
+    </symbol>
+  </defs>
+
+  <g opacity="0.28" filter="url(#soft)" transform="translate(9 12)">
+    <path d="M-40 -10 C110 60 180 210 300 340 C390 440 470 540 560 790" stroke="#3b1c1d" stroke-width="15" stroke-linecap="round"/>
+    <path d="M90 155 C185 110 250 125 330 165" stroke="#3b1c1d" stroke-width="8" stroke-linecap="round"/>
+    <path d="M215 265 C305 220 400 235 470 290" stroke="#3b1c1d" stroke-width="7" stroke-linecap="round"/>
+    <path d="M320 385 C250 380 200 410 165 465" stroke="#3b1c1d" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <g stroke="url(#stem)" stroke-linecap="round" fill="none">
+    <path d="M-40 -10 C110 60 180 210 300 340 C390 440 470 540 560 790" stroke-width="13"/>
+    <path d="M90 155 C185 110 250 125 330 165" stroke-width="7"/>
+    <path d="M215 265 C305 220 400 235 470 290" stroke-width="6.5"/>
+    <path d="M320 385 C250 380 200 410 165 465" stroke-width="5.5"/>
+    <path d="M385 465 C455 435 510 450 560 490" stroke-width="5"/>
+    <path d="M160 215 C130 255 118 295 120 335" stroke-width="4.5"/>
+    <path d="M455 545 C405 570 380 610 378 655" stroke-width="4.5"/>
+  </g>
+
+  <g>
+    <use href="#leaf" x="-30" y="-12" width="86" height="34" transform="translate(62 100) rotate(28)"/>
+    <use href="#leaf" x="-30" y="-12" width="92" height="37" transform="translate(150 190) rotate(-24)"/>
+    <use href="#leaf" x="-30" y="-12" width="78" height="31" transform="translate(210 250) rotate(34)"/>
+    <use href="#leaf" x="-30" y="-12" width="88" height="35" transform="translate(268 300) rotate(-18)"/>
+    <use href="#leaf" x="-30" y="-12" width="82" height="33" transform="translate(342 390) rotate(22)"/>
+    <use href="#leaf" x="-30" y="-12" width="76" height="30" transform="translate(420 475) rotate(-20)"/>
+    <use href="#leaf" x="-30" y="-12" width="70" height="28" transform="translate(480 560) rotate(30)"/>
+    <use href="#leaf" x="-30" y="-12" width="66" height="26" transform="translate(175 128) rotate(-8)"/>
+    <use href="#leaf" x="-30" y="-12" width="64" height="26" transform="translate(392 248) rotate(16)"/>
+    <use href="#leaf" x="-30" y="-12" width="60" height="24" transform="translate(228 424) rotate(-32)"/>
+    <use href="#leaf" x="-30" y="-12" width="58" height="23" transform="translate(520 482) rotate(24)"/>
+  </g>
+
+  <g>
+    <use href="#blossom" x="-40" y="-40" width="96" height="96" transform="translate(122 72) rotate(-12)"/>
+    <use href="#blossom" x="-40" y="-40" width="78" height="78" transform="translate(232 118) rotate(18)"/>
+    <use href="#blossom" x="-40" y="-40" width="88" height="88" transform="translate(330 164) rotate(-6)"/>
+    <use href="#blossom" x="-40" y="-40" width="102" height="102" transform="translate(305 272) rotate(24)"/>
+    <use href="#blossom" x="-40" y="-40" width="72" height="72" transform="translate(468 288) rotate(-20)"/>
+    <use href="#blossom" x="-40" y="-40" width="92" height="92" transform="translate(378 392) rotate(8)"/>
+    <use href="#blossom" x="-40" y="-40" width="84" height="84" transform="translate(172 452) rotate(-16)"/>
+    <use href="#blossom" x="-40" y="-40" width="98" height="98" transform="translate(556 488) rotate(14)"/>
+    <use href="#blossom" x="-40" y="-40" width="76" height="76" transform="translate(378 652) rotate(-8)"/>
+    <use href="#blossom" x="-40" y="-40" width="68" height="68" transform="translate(36 46) rotate(32)" opacity="0.9"/>
+  </g>
+
+  <g opacity="0.62" filter="url(#soft)">
+    <use href="#blossom" x="-40" y="-40" width="86" height="86" transform="translate(196 336) rotate(12)"/>
+    <use href="#blossom" x="-40" y="-40" width="72" height="72" transform="translate(500 380) rotate(-26)"/>
+    <use href="#blossom" x="-40" y="-40" width="66" height="66" transform="translate(120 302) rotate(20)"/>
+  </g>
+
+  <g>
+    <use href="#bud" x="-10" y="-14" width="26" height="36" transform="translate(268 196) rotate(26)"/>
+    <use href="#bud" x="-10" y="-14" width="22" height="32" transform="translate(408 326) rotate(-18)"/>
+    <use href="#bud" x="-10" y="-14" width="24" height="34" transform="translate(502 418) rotate(34)"/>
+    <use href="#bud" x="-10" y="-14" width="20" height="30" transform="translate(286 522) rotate(-12)"/>
+  </g>
+</svg>
