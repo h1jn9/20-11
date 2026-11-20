@@ -12,28 +12,77 @@ const branchImg = document.getElementById('phuong-branch-img');
 const bgMusic = document.getElementById('bg-music');
 
 const MUSIC_VOLUME = 0.55;
+const MUSIC_GESTURES = ['pointerdown', 'touchstart', 'mousedown', 'keydown', 'click', 'wheel'];
 const IGNORE_FX = 'button, a, input, textarea, select, .wish-modal, .wish-card, .letter-inner, #envelope-wrapper, .calendar-sheet';
+
+let musicInitialized = false;
+let musicRetryTimers = [];
+let creditTimer = 0;
+
+function clearMusicRetries() {
+    musicRetryTimers.forEach((id) => window.clearTimeout(id));
+    musicRetryTimers = [];
+}
 
 function playMusic() {
     if (!bgMusic) return;
     bgMusic.volume = MUSIC_VOLUME;
     bgMusic.loop = true;
-    if (!bgMusic.paused) return;
+    if (!bgMusic.paused && !bgMusic.ended) {
+        clearMusicRetries();
+        return;
+    }
 
     try {
+        if (bgMusic.readyState === 0) bgMusic.load();
         const playPromise = bgMusic.play();
-        if (playPromise && typeof playPromise.catch === 'function') {
-            playPromise.catch(() => {});
+        if (playPromise && typeof playPromise.then === 'function') {
+            playPromise.then(clearMusicRetries).catch(() => {});
         }
     } catch (_) {}
 }
 
+function retryMusic() {
+    playMusic();
+    if (bgMusic && bgMusic.paused) {
+        clearMusicRetries();
+        [80, 220, 480].forEach((delay) => {
+            musicRetryTimers.push(window.setTimeout(playMusic, delay));
+        });
+    }
+}
+
 function initMusic() {
+    if (musicInitialized || !bgMusic) return;
+    musicInitialized = true;
+
     playMusic();
     window.addEventListener('load', playMusic, { once: true });
-    ['pointerdown', 'click', 'touchstart', 'keydown'].forEach((eventName) => {
-        document.addEventListener(eventName, playMusic, { once: true, capture: true });
+    bgMusic.addEventListener('canplay', playMusic, { once: true });
+    bgMusic.addEventListener('loadeddata', playMusic, { once: true });
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) playMusic();
     });
+
+    MUSIC_GESTURES.forEach((eventName) => {
+        const options = { capture: true, passive: eventName === 'wheel' || eventName === 'touchstart' };
+        document.addEventListener(eventName, retryMusic, options);
+    });
+}
+
+function revealCreditAfterIntro() {
+    const finish = () => {
+        window.clearTimeout(creditTimer);
+        introOverlay.removeEventListener('transitionend', onCreditTransition);
+        document.body.classList.add('intro-complete');
+    };
+
+    const onCreditTransition = (event) => {
+        if (event.target === introOverlay && event.propertyName === 'opacity') finish();
+    };
+
+    introOverlay.addEventListener('transitionend', onCreditTransition);
+    creditTimer = window.setTimeout(finish, 1500);
 }
 
 function initRipples() {
@@ -91,9 +140,11 @@ async function runIntro() {
     goToStage(1);
     await wait(320);
     introOverlay.classList.add('is-done');
+    revealCreditAfterIntro();
 }
 
 function init() {
+    initMusic();
     bindFallback(branchImg, ASSETS.branch.fallback);
 
     initFx({ ignore: (event) => Boolean(event.target.closest(IGNORE_FX)), branch: branchImg });
@@ -109,7 +160,6 @@ function init() {
     initWish3D();
     initLetter();
     initRipples();
-    initMusic();
     initBranchParallax();
     wireButtons();
 

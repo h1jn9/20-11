@@ -2,6 +2,7 @@ import { setFxStage } from './fx.js';
 
 const handlers = new Map();
 let currentStage = 0;
+let stageToken = 0;
 
 export const getStage = () => currentStage;
 
@@ -38,7 +39,9 @@ export function goToStage(number) {
     document.body.dataset.stage = String(number);
     setFxStage(number);
 
+    const token = ++stageToken;
     requestAnimationFrame(() => {
+        if (token !== stageToken) return;
         restartAnimations(target);
         const next = handlers.get(number);
         if (next?.enter) next.enter();

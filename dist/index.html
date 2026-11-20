@@ -89,7 +89,11 @@
              GIAI ĐOẠN 2 – NGÀN BÔNG HOA
         ========================================================== -->
         <section id="stage-2" class="stage stage-bloom hidden-stage" data-stage="2">
-            <div id="flower-bed" class="flower-bed" aria-hidden="true"></div>
+            <div id="flower-bed" class="flower-bed" aria-hidden="true">
+                <div class="flower-layer depth-back" data-depth="back"></div>
+                <div class="flower-layer depth-mid" data-depth="mid"></div>
+                <div class="flower-layer depth-front" data-depth="front"></div>
+            </div>
             <div class="bloom-tint" aria-hidden="true"></div>
             <div class="bloom-copy" id="bloom-copy">
                 <span class="filigree" aria-hidden="true"><i></i><b></b><i></i></span>
@@ -226,6 +230,8 @@
     </main>
 
     <audio id="bg-music" src="./nhac.mp3" loop preload="auto" hidden aria-hidden="true"></audio>
+
+    <div id="site-credit" class="site-credit" aria-hidden="true">&copy;giahung</div>
 
     <script type="module" src="script.js"></script>
 </body>

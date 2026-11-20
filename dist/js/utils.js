@@ -22,22 +22,12 @@ export function shuffle(arr) {
 
 export function createSmartLoop(tick) {
     let rafId = 0;
-    let timerId = 0;
     let running = false;
-    let stamp = 0;
 
     function frame(time) {
         if (!running) return;
-        tick(time);
-        const token = ++stamp;
         rafId = requestAnimationFrame(frame);
-        clearTimeout(timerId);
-        timerId = window.setTimeout(() => {
-            if (running && token === stamp) {
-                cancelAnimationFrame(rafId);
-                frame(performance.now());
-            }
-        }, 140);
+        tick(time);
     }
 
     return {
@@ -49,7 +39,7 @@ export function createSmartLoop(tick) {
         stop() {
             running = false;
             cancelAnimationFrame(rafId);
-            clearTimeout(timerId);
+            rafId = 0;
         }
     };
 }

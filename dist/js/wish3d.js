@@ -27,9 +27,11 @@ let rotY = 0;
 let velX = 0;
 let velY = 0;
 let dragging = false;
-let pointerId = null;
+let dragPointerId = null;
 let lastPointerX = 0;
 let lastPointerY = 0;
+let dragDistance = 0;
+let suppressClick = false;
 let radius = 210;
 let radiusZ = 150;
 let particleW = 0;
@@ -59,6 +61,10 @@ function buildCards() {
 
         card.addEventListener('click', (event) => {
             event.stopPropagation();
+            if (suppressClick) {
+                suppressClick = false;
+                return;
+            }
             openWish(wish);
         });
 
@@ -115,6 +121,22 @@ function closeWish() {
     modal.classList.add('hidden');
 }
 
+function blockSelection(event) {
+    event.preventDefault();
+    return false;
+}
+
+function initSelectionLock() {
+    [world, cardsHost, modal].filter(Boolean).forEach((element) => {
+        ['copy', 'selectstart', 'contextmenu'].forEach((eventName) => {
+            element.addEventListener(eventName, blockSelection);
+        });
+    });
+
+    document.addEventListener('copy', blockSelection, true);
+    document.addEventListener('selectstart', blockSelection, true);
+}
+
 function rotatePoint(x, y, z, cosY, sinY, cosX, sinX) {
     const x1 = x * cosY + z * sinY;
     const z1 = -x * sinY + z * cosY;
@@ -130,11 +152,11 @@ function renderDots(cosY, sinY, cosX, sinX) {
     const centerX = particleW / 2;
     const centerY = particleH / 2;
     const perspective = 760;
+    const spinCos = Math.cos(dotSpin);
+    const spinSin = Math.sin(dotSpin);
 
     ctx.globalCompositeOperation = 'lighter';
     for (const dot of dots) {
-        const spinCos = Math.cos(dotSpin);
-        const spinSin = Math.sin(dotSpin);
         const sx = dot.x * spinCos - dot.z * spinSin;
         const sz = dot.x * spinSin + dot.z * spinCos;
         const p = rotatePoint(sx * dot.distance, dot.y * dot.distance, sz * dot.distance, cosY, sinY, cosX, sinX);
@@ -174,8 +196,8 @@ function updateCards(cosY, sinY, cosX, sinX) {
         const x = centerX + p.x * scale;
         const y = centerY + p.y * scale;
 
-        card.style.left = `${x.toFixed(1)}px`;
-        card.style.top = `${y.toFixed(1)}px`;
+        card.style.setProperty('--card-x', `${x.toFixed(1)}px`);
+        card.style.setProperty('--card-y', `${y.toFixed(1)}px`);
         card.style.setProperty('--card-scale', (0.82 + depth * 0.22).toFixed(3));
         card.style.setProperty('--card-opacity', (0.42 + depth * 0.58).toFixed(3));
         card.style.setProperty('--card-blur', depth < 0.3 ? `${((0.3 - depth) * 3).toFixed(2)}px` : '0px');
@@ -219,40 +241,109 @@ function frame(time) {
 
 const wishLoop = createSmartLoop(frame);
 
-function onPointerDown(event) {
-    if (event.button !== undefined && event.button !== 0) return;
-    if (event.target.closest('.wish-card')) return;
+function beginDrag(x, y, pointerId) {
+    if (dragging) return;
     dragging = true;
-    pointerId = event.pointerId;
-    lastPointerX = event.clientX;
-    lastPointerY = event.clientY;
+    dragPointerId = pointerId;
+    lastPointerX = x;
+    lastPointerY = y;
+    dragDistance = 0;
+    suppressClick = false;
     velX = 0;
     velY = 0;
-    world.setPointerCapture?.(pointerId);
 }
 
-function onPointerMove(event) {
-    if (!dragging || event.pointerId !== pointerId) return;
-    const dx = event.clientX - lastPointerX;
-    const dy = event.clientY - lastPointerY;
-    lastPointerX = event.clientX;
-    lastPointerY = event.clientY;
+function moveDrag(x, y) {
+    if (!dragging) return;
+    const dx = x - lastPointerX;
+    const dy = y - lastPointerY;
+    lastPointerX = x;
+    lastPointerY = y;
+    dragDistance += Math.abs(dx) + Math.abs(dy);
+    if (dragDistance > 6) suppressClick = true;
+
     rotY += dx * 0.34;
-    const nextRotX = clamp(rotX + dy * 0.28, -18, 18);
+    const targetRotX = rotX + dy * 0.28;
+    const nextRotX = clamp(targetRotX, -18, 18);
     velY = dx * 0.34;
-    velX = nextRotX === rotX + dy * 0.28 ? dy * 0.28 : 0;
+    velX = nextRotX === targetRotX ? dy * 0.28 : 0;
     rotX = nextRotX;
 }
 
-function onPointerUp(event) {
-    if (event.pointerId !== pointerId) return;
+function endDrag(pointerId) {
+    if (!dragging) return;
+    if (dragPointerId !== null && pointerId !== null && pointerId !== dragPointerId) return;
     dragging = false;
-    pointerId = null;
-    world.releasePointerCapture?.(event.pointerId);
+    dragPointerId = null;
+    if (suppressClick) window.setTimeout(() => { suppressClick = false; }, 0);
+}
+
+function onPointerDown(event) {
+    if (!active || (event.button !== undefined && event.button !== 0)) return;
+    if (event.target.closest?.('.wish-card, .wish-modal')) return;
+    beginDrag(event.clientX, event.clientY, event.pointerId);
+    world.setPointerCapture?.(event.pointerId);
+}
+
+function onPointerMove(event) {
+    if (!dragging || dragPointerId !== event.pointerId) return;
+    moveDrag(event.clientX, event.clientY);
+}
+
+function onPointerUp(event) {
+    if (dragPointerId !== event.pointerId) return;
+    endDrag(event.pointerId);
+    if (world.hasPointerCapture?.(event.pointerId)) world.releasePointerCapture(event.pointerId);
+}
+
+function onTouchStart(event) {
+    if (!active || event.target.closest?.('.wish-card')) return;
+    const touch = event.touches[0];
+    if (!touch) return;
+    beginDrag(touch.clientX, touch.clientY, 'touch');
+    event.preventDefault();
+}
+
+function onTouchMove(event) {
+    if (!dragging || dragPointerId !== 'touch') return;
+    const touch = event.touches[0];
+    if (!touch) return;
+    moveDrag(touch.clientX, touch.clientY);
+    event.preventDefault();
+}
+
+function onTouchEnd() {
+    if (dragPointerId !== 'touch') return;
+    endDrag('touch');
+}
+
+function onMouseDown(event) {
+    if (!active || event.button !== 0 || event.target.closest?.('.wish-card')) return;
+    beginDrag(event.clientX, event.clientY, 'mouse');
+    event.preventDefault();
+}
+
+function onMouseMove(event) {
+    if (!dragging || dragPointerId !== 'mouse') return;
+    moveDrag(event.clientX, event.clientY);
+}
+
+function onMouseUp() {
+    if (dragPointerId !== 'mouse') return;
+    endDrag('mouse');
 }
 
 function onResize() {
     if (active) resizeParticles();
+}
+
+function onVisibility() {
+    if (document.hidden) {
+        wishLoop.stop();
+    } else {
+        lastTime = 0;
+        if (active) wishLoop.start();
+    }
 }
 
 function onKeyDown(event) {
@@ -263,18 +354,31 @@ export function initWish3D() {
     resizeParticles();
     buildCards();
     buildDots();
+    initSelectionLock();
 
-    world.addEventListener('pointerdown', onPointerDown);
-    world.addEventListener('pointermove', onPointerMove);
-    world.addEventListener('pointerup', onPointerUp);
-    world.addEventListener('pointercancel', onPointerUp);
-    world.addEventListener('pointerleave', onPointerUp);
+    if ('PointerEvent' in window) {
+        world.addEventListener('pointerdown', onPointerDown);
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointercancel', onPointerUp);
+        world.addEventListener('lostpointercapture', onPointerUp);
+    } else {
+        world.addEventListener('touchstart', onTouchStart, { passive: false });
+        window.addEventListener('touchmove', onTouchMove, { passive: false });
+        window.addEventListener('touchend', onTouchEnd);
+        window.addEventListener('touchcancel', onTouchEnd);
+        world.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+    }
+
     document.getElementById('btn-close-modal').addEventListener('click', closeWish);
     modal.addEventListener('click', (event) => {
         if (event.target === modal) closeWish();
     });
     window.addEventListener('resize', onResize, { passive: true });
     window.addEventListener('keydown', onKeyDown);
+    document.addEventListener('visibilitychange', onVisibility);
 }
 
 export function enterWish3D() {
@@ -288,6 +392,8 @@ export function enterWish3D() {
 export function leaveWish3D() {
     active = false;
     wishLoop.stop();
+    dragging = false;
+    dragPointerId = null;
     closeWish();
     ctx.clearRect(0, 0, particleW, particleH);
 }
