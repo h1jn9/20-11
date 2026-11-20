@@ -51,13 +51,17 @@ function getSafeRects() {
     });
 }
 
-function collides(x, y, radius, rects) {
-    return rects.some((rect) =>
+function collidesRect(x, y, radius, rect) {
+    return (
         x + radius > rect.left &&
         x - radius < rect.right &&
         y + radius > rect.top &&
         y - radius < rect.bottom
     );
+}
+
+function collides(x, y, radius, rects) {
+    return rects.some((rect) => collidesRect(x, y, radius, rect));
 }
 
 function placeFlower(x, y, radius, rects, width, height) {
@@ -70,7 +74,7 @@ function placeFlower(x, y, radius, rects, width, height) {
         let best = null;
 
         for (const rect of rects) {
-            if (!collides(px, py, radius, rect)) continue;
+            if (!collidesRect(px, py, radius, rect)) continue;
 
             const candidates = [
                 { x: rect.left - radius - 4, y: py },
@@ -178,6 +182,26 @@ function buildFlowerBed() {
                 if (addFlower(fragments, safeRects, width, height, smallX, smallY, smallSize, 'back', smallDelay)) placed++;
             }
         }
+    }
+
+    if (placed < 12) {
+        const fallbackPoints = [
+            [0.08, 0.08], [0.5, 0.06], [0.92, 0.08], [0.06, 0.5],
+            [0.94, 0.5], [0.08, 0.92], [0.5, 0.94], [0.92, 0.92]
+        ];
+
+        fallbackPoints.forEach(([fx, fy], index) => {
+            let size = narrow ? 72 : 120;
+            for (let attempt = 0; attempt < 4; attempt++) {
+                const x = fx * width + rand(-18, 18);
+                const y = fy * height + rand(-18, 18);
+                if (addFlower(fragments, safeRects, width, height, x, y, size, 'back', 0.2 + index * 0.05)) {
+                    placed++;
+                    return;
+                }
+                size = Math.round(size * 0.75);
+            }
+        });
     }
 
     Object.entries(fragments).forEach(([depth, fragment]) => layers[depth].appendChild(fragment));
